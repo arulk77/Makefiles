@@ -38,26 +38,24 @@ ifdef verdi_opt
 verdi_opt      := $(verdi_opt) $(verdi_def_opt)
 endif
 
-
 ##++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ## Verdi specific options
 ##++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.PHONY : verdi_clean verdi_help verdicom verdi
 
 ## Remove the logs and the directory created by this script
-clean:
-	rm -rf $(libname)* vericom* verdicomp* verdiLog
+verdi_clean:
+	rm -rf $(verdi_lib)* vericom* verdicomp* verdiLog
 
 verdicom:
 	$(bsub_cmd) \vericom $(vcom_opt) -f $(file)
 
 ## Invoke the verdi in ghi mode
 verdi: 
-	$(bsub_cmd) \verdi $(verdi_opt) $(rc_opt) -ssf $(fsdb) $(vtop_opt) -lib $(VERDI_LIB).lib++ 
+	$(bsub_cmd) \verdi $(verdi_opt) $(rc_opt) -ssf $(fsdb) $(vtop_opt) -lib $(verdi_lib).lib++ 
 
 ## Help for the verdi compilation
-help:
-        echo <<EOF
-        $(THIS_FILE) : Usage for the verdi commands are
-        $(THIS_FILE) : make file=<filename> verdicom --> To compile only
-        $(THIS_FILE) : make fsdb=<fsdbfilename>
-EOF
+verdi_help:
+	@echo "$(THIS_FILE) : Usage for the verdi commandas are "
+	@echo "             : make file=<vlist_file_name> verdicom   --> To compile"
+	@echo "             : make fsdb=<fsdbfilename? rc_file=[rc file] vtop=[vtop file] verdi"
