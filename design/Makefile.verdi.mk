@@ -36,6 +36,8 @@ endif
 verdi_def_opt  := -nologo -WorkMode hardwareDebug
 ifdef verdi_opt
 verdi_opt      := $(verdi_opt) $(verdi_def_opt)
+else
+verdi_opt      := $(verdi_def_opt)
 endif
 
 ##++++++++++++++++++++++++++++++++++++++++++++++++++++++

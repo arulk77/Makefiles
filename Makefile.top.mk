@@ -13,15 +13,20 @@ define HLP
   TOP : This is the top level help
 endef
 
+MAKE_CMD := @$(MAKE) -f $(INCLUDE_TOP)/Makefile.bsub.mk
+
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ## Targets for the top level
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-.PHONY: clean help verdi*
+.PHONY: clean help this* verd*
 
 clean: verdi_clean
 
-help: verdi_help
+help: this_help verdi_help
 
-verdi%: 
-	@$(MAKE) -f $(INCLUDE_TOP)/Makefile.verdi.mk -f $(INCLUDE_TOP)/Makefile.bsub.mk $@
+this_help:
+	@echo "TOP : This includes all the help routine"
+
+verd%: 
+	$(MAKE_CMD) -f $(INCLUDE_TOP)/Makefile.verdi.mk $@
 
