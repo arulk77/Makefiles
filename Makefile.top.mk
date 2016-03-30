@@ -5,14 +5,15 @@ endif
 
 verdi_mk_file := $(INCLUDE_TOP)/design/Makefile.verdi.mk
 
-## Variable for the help command
-define HLP
-  TOP : This is the top level help
-endef
 
-MAKE_FILES := $(wildcard $(INCLUDE_TOP)/design/*.mk)
+## Makefile specific variables and options
+MAKE_FILES := $(wildcard $(INCLUDE_TOP)/bsub/*.mk)
+MAKE_FILES := $(MAKE_FILES) $(wildcard $(INCLUDE_TOP)/design/*.mk)
 
-MAKE_CMD := @$(MAKE) $(MFLAGS) -f $(INCLUDE_TOP)/bsub/Makefile.bsub.mk 
+## Makefile command
+## MAKE_CMD := @$(MAKE) $(MFLAGS) -f $(INCLUDE_TOP)/bsub/Makefile.bsub.mk 
+
+MAKE_CMD := @$(MAKE) $(MFLAGS)
 
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ## Targets for the top level
@@ -20,16 +21,12 @@ MAKE_CMD := @$(MAKE) $(MFLAGS) -f $(INCLUDE_TOP)/bsub/Makefile.bsub.mk
 .PHONY: clean help this* verd*
 
 ## Clean everything
-clean:
-	$(foreach mfile,$(MAKE_FILES),@$(MAKE_CMD) -f $(mfile) $@;)
+clean_all:
+	$(foreach mfile,$(MAKE_FILES),@$(MAKE_CMD) -f $(mfile) clean;)
 
 ## Print all the help menu
-help: 
-	$(foreach mfile,$(MAKE_FILES),@$(MAKE_CMD) -f $(mfile) $@;)
+help::
+	@echo "Help from the top file"
 
-this_help:
-	@echo "TOP : This includes all the help routine"
-
-ver%: 
-	$(MAKE_CMD) -f $(verdi_mk_file) $@
-
+## Include all other makfeiles
+include $(MAKE_FILES)

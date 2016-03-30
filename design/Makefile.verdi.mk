@@ -49,25 +49,24 @@ endif
 .PHONY : verdi_clean verdi_help verdicom verdi
 
 ## Remove the logs and the directory created by this script
-verdi_clean:
+verdi_clean::
 	rm -rf $(verdi_lib)* vericom* verdicomp* verdiLog
 
 ## Verdicom and vericom are the same
-vericom: verdicom
-
-verdicom:
+vericom:: verdicom
+verdicom::
 	$(bsub_cmd) \vericom $(verdicom_opt) -f $(file)
 
 ## Invoke the verdi in ghi mode
-verdi: 
+verdi::
 	$(bsub_cmd) \verdi $(verdi_opt) $(rc_opt) -ssf $(fsdb) $(vtop_opt) -lib $(verdi_lib).lib++ 
 
 ## Help for the verdi compilation
-verdi_help:
-	@echo "$(THIS_FILE) : Usage for the verdi commandas are "
-	@echo "             : make file=<vlist_file_name> verdicom   --> To compile"
-	@echo "             : make fsdb=<fsdbfilename? rc_file=[rc file] vtop=[vtop file] verdi"
+verdi_help::
+	@echo "Makefile.verdi -> Usage for the verdi commandas are "
+	@echo "                  make file=<vlist_file_name> verdicom   --> To compile"
+	@echo "                  make fsdb=<fsdbfilename? rc_file=[rc file] vtop=[vtop file] verdi"
 
 ## Clean and help are same as verdi commands
-clean: verdi_clean
-help: verdi_help
+clean:: verdi_clean
+help:: verdi_help

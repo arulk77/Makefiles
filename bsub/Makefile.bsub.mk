@@ -25,6 +25,8 @@ define BSUB_HLP
 	bsub : The bsub command help
 endef
 
+THIS_FILE := Makefile.bsub
+
 
 ##---------------------------------------------------------------
 ## Compilation options for the vcs tool 
@@ -34,5 +36,11 @@ endef
 
 ## Help routine for the make file
 bsub_help:
-	@echo "BSUB: The options for bsub are b_hosts bsub_opt b_mem"
+	@echo "Makefile.bsub -> The options for bsub are b_hosts bsub_opt b_mem"
 
+bsub_clean:
+	@echo "Makefile.bsub -> Dummy clean for the bsub"
+
+## Helep and clean entry 
+help:: bsub_help
+clean:: bsub_clean
