@@ -3,7 +3,9 @@
 
 THIS_FILE := Makefile.verdi
 
+ifndef file
 file := 
+endif
 
 ## Just declare an empty bsub command 
 ifndef bsub_cmd
@@ -54,12 +56,17 @@ verdi_clean::
 
 ## Verdicom and vericom are the same
 vericom:: verdicom
-verdicom::
+verdicom:: $(file)
 	$(bsub_cmd) \vericom $(verdicom_opt) -f $(file)
 
 ## Invoke the verdi in ghi mode
-verdi::
+verdi_gui::
 	$(bsub_cmd) \verdi $(verdi_opt) $(rc_opt) -ssf $(fsdb) $(vtop_opt) -lib $(verdi_lib).lib++ 
+
+## Invoke both verdi compilation and gui
+verdi::
+	$(MAKE) $(MFLAGS) I=1 verdicom 
+	$(MAKE) $(MFLAGS) verdi_gui
 
 ## Help for the verdi compilation
 verdi_help::
