@@ -48,7 +48,7 @@ endif
 ##++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ## Verdi specific options
 ##++++++++++++++++++++++++++++++++++++++++++++++++++++++
-.PHONY : verdi_clean verdi_help verdicom verdi
+.PHONY : verdi_clean verdi_help verdicom verdi verdi_gui
 
 ## Remove the logs and the directory created by this script
 verdi_clean::
