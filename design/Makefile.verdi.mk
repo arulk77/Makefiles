@@ -12,37 +12,32 @@ ifndef bsub_cmd
        bsub_cmd :=
 endif
 
-## VTOP file specification
-ifndef vtop
-	vtop_opt := 
-else
-	vtop_opt := -vtop $(vtop)
-endif
-
-## RC file
-ifndef rc_file
-	rc_opt :=
-else
-	rc_opt := -sswr $(rc_file)
-endif
-
 ## Verdi tool specific options
 verdi_lib      := verdilib
 vcom_def_opt   := -ssy -ssv -sverilog -assert svaext -lib $(verdi_lib)
 verdi_def_opt  := -nologo -WorkMode hardwareDebug
 
-## If use specifies the option then add that as variable
-ifdef verdicom_opt
-verdicom_opt   := $(verdicom_opt) $(vcom_def_opt)
+verdi_timeout := 1200
+
+##++++++++++++++++++++++++++++++++++++++++++++++++++++
+## verdi GUI options
+##++++++++++++++++++++++++++++++++++++++++++++++++++++
+## Give fsdb file only if fsdb file is passed
+ifdef fsdb
+verdi_def_opt := $(verdi_def_opt) -ssf $(fsdb)
 else
-verdicom_opt   := $(vcom_def_opt)
+## Get the latest fsdb if available
+verdi_def_opt := $(verdi_def_opt) -ssf $(shell ls -t *.fsdb | head -n 1)
 endif
 
-## If verdi option is specified by the user then append
-ifdef verdi_opt
-verdi_opt      := $(verdi_opt) $(verdi_def_opt)
-else
-verdi_opt      := $(verdi_def_opt)
+## Give the rcfile only if it is defined
+ifdef rc_file
+verdi_def_opt := $(verdi_def_opt) -sswr $(rc_file)
+endif
+
+## vtop options
+ifdef vtop
+verdi_def_opt := $(verdi_def_opt) -vtop $(vtop)
 endif
 
 ##++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -57,15 +52,25 @@ verdi_clean::
 ## Verdicom and vericom are the same
 vericom:: verdicom
 verdicom:: $(file)
-	$(bsub_cmd) \vericom $(verdicom_opt) -f $(file)
+	$(bsub_cmd) \vericom $(verdicom_opt) $(vcom_def_opt) -f $(file)
 
 ## Invoke the verdi in ghi mode
+ifdef fsdb
+verdi_gui:: verdi_wait_fsdb
+else
 verdi_gui::
-	$(bsub_cmd) \verdi $(verdi_opt) $(rc_opt) -ssf $(fsdb) $(vtop_opt) -lib $(verdi_lib).lib++ 
+endif
+	$(bsub_cmd) \verdi $(verdi_opt) $(verdi_def_opt) -lib $(verdi_lib).lib++ 
+
+verdi_wait_fsdb::
+	timeout $(verdi_timeout) bash -c	-- 'while [ ! -e $(fsdb) ]; \
+   do echo "Waiting for the file $(fsdb) to be created";	sleep 10; done;'
 
 ## Invoke both verdi compilation and gui
 verdi::
 	$(MAKE) $(MFLAGS) I=1 verdicom 
+   ifdef fsdb
+   endif
 	$(MAKE) $(MFLAGS) verdi_gui
 
 ## Help for the verdi compilation

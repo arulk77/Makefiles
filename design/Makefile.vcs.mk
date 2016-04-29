@@ -25,8 +25,13 @@ vlogan = \vlogan
 vcs    = \vcs
 endif
 
+## vcs number of process
+ifndef vcs_no_process
+vcs_no_process := 20
+endif
+
 vlogan_def_opt = -sverilog -full64 +define+VCS -timescale=1ns/1ps 
-vcs_def_opt    = -sverilog -full64 -timescale=1ns/1ps +vcs+lic+wait -l $(@).simv.log
+vcs_def_opt    = -sverilog -full64 -j$(vcs_no_process) -timescale=1ns/1ps +vcs+lic+wait -l $(@).simv.log
 
 ## Assemble the vlogan_opt
 ifdef vlogan_opt 

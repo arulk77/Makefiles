@@ -14,7 +14,7 @@ ifndef rlocal
 	endif
 
 	ifdef I
-		bsub_cmd = $(bsub_def_cmd) -I 
+		bsub_cmd = $(bsub_def_cmd) -Ip 
 	else 
 		bsub_cmd = $(bsub_def_cmd) -oo $(@).log
 	endif
