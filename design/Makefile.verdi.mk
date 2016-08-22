@@ -40,6 +40,12 @@ ifdef vtop
 verdi_def_opt := $(verdi_def_opt) -vtop $(vtop)
 endif
 
+## top options
+ifdef top
+verdi_def_opt := $(verdi_def_opt) -top $(top)
+endif
+
+
 ##++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ## Verdi specific options
 ##++++++++++++++++++++++++++++++++++++++++++++++++++++++
